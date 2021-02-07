@@ -21,6 +21,7 @@ use Kreait\Firebase\Messaging\Notification;
 Route::get('/', function () {
     $deviceToken = "fQ9GlswcQDeoVzBkSgF0S5:APA91bHBMZBSO8lifdlpwmFLjE1Z7f1XxBHp0k5rVRvrek51pmgDjOfpXAxTcLMqPWv-0xn7gAV6Dj6NRq1ifhEe7ATw5uRogQ-qpqtXYGcsx-xmKSL1qNbWH3p4Ndf-woi46KbvoYVF";
     $factory = (new Factory)->withServiceAccount(__DIR__.'\..\fcmtest-73a06-firebase-adminsdk-nafl1-ae84c5f43d.json');
+
     $messaging = $factory->createMessaging();
 
     $message = CloudMessage::withTarget('token', $deviceToken);
