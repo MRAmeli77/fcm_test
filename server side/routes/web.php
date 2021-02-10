@@ -19,12 +19,16 @@ use Kreait\Firebase\Messaging\Notification;
 */
 
 Route::get('/', function () {
-    $deviceToken = "e6jomCy4SZSm8eggAVlfu7:APA91bHmWEX3A1q7H6hGBLuX6_PwIQYYqJe3WXmK6xwZkW5gWJZIdXnZLnkmcmYtzonXVtzIRr5mfr7MpnsuuhVhOJ3O4VeseXzRoH3B2SvfGjteg-n2SC3iHwATPFunYazAVkGG-0qG";
-    $factory = (new Factory)->withServiceAccount(__DIR__ . '\..\fcmtest-73a06-firebase-adminsdk-nafl1-ae84c5f43d.json');
+    $deviceToken = "fQ9GlswcQDeoVzBkSgF0S5:APA91bHBMZBSO8lifdlpwmFLjE1Z7f1XxBHp0k5rVRvrek51pmgDjOfpXAxTcLMqPWv-0xn7gAV6Dj6NRq1ifhEe7ATw5uRogQ-qpqtXYGcsx-xmKSL1qNbWH3p4Ndf-woi46KbvoYVF";
+    $factory = (new Factory)->withServiceAccount(__DIR__.'\..\fcmtest-73a06-firebase-adminsdk-nafl1-ae84c5f43d.json');
+
     $messaging = $factory->createMessaging();
 
-    $message = CloudMessage::withTarget('token', $deviceToken)->withNotification(Notification::create('Title is title', 'Body is body2'))// optional
-    ->withData(['title' => 'message testttttttttttttt']);
+    $message = CloudMessage::withTarget('token', $deviceToken);
+    $message = CloudMessage::fromArray([
+        'token' => $deviceToken,
+        'notification' => Notification::create('Title is title', 'Body is body2') // optional
+    ]);
     $messaging->send($message);
 
     //    $url = 'https://fcm.googleapis.com/fcm/send';
