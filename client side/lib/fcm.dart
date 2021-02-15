@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -9,11 +10,22 @@ import 'notification.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 
+Timer timer;
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   await initializeNotification();
 
   if (message.containsKey('data')) {
+    if (message['data']['timer'] == 'startTimer') {
+      timer?.cancel();
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        showNotification('bacground Timer', '${timer.tick}');
+      });
+    }
+    if (message['data']['timer'] == 'stopTimer') {
+      timer?.cancel();
+      timer = null;
+    }
     // Handle data message
     final dynamic data = message['data'];
     print('************** Background Message Data *****************');
