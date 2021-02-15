@@ -1,17 +1,30 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'fcm.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  Firebase.initializeApp();
+
   runApp(MyApp());
+
+  firebaseMessaging.configure(
+    onMessage: (Map<String, dynamic> message) async {
+      print("onMessage: $message");
+    },
+    onBackgroundMessage: myBackgroundMessageHandler,
+    onLaunch: (Map<String, dynamic> message) async {
+      print("onLaunch: $message");
+    },
+    onResume: (Map<String, dynamic> message) async {
+      print("onResume: $message");
+    },
+  );
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,12 +51,22 @@ class _MyHomePage2State extends State<MyHomePage2> {
         appBar: AppBar(
           title: Text("Firebase Messaing"),
         ),
-        body: Container(
+        body: Column(
+          children: [
+            Container(
           child: FlatButton(
-              onPressed: () {
+                  onPressed: () async {
+                    print('*********************** Token********************');
                 FirebaseMessaging().getToken().then(print);
               },
               child: Text("Print token")),
+            ),
+            Container(
+              child: FlatButton(
+                  onPressed: sendAndRetrieveMessage,
+                  child: Text("send And Retrieve Message ")),
+            ),
+          ],
         ));
   }
 }
