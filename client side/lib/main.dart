@@ -3,16 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'fcm.dart';
+import 'notification.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
+
+  initializeNotification();
 
   runApp(MyApp());
 
   firebaseMessaging.configure(
     onMessage: (Map<String, dynamic> message) async {
       print("onMessage: $message");
+      showNotification('onMessage', '$message');
     },
     onBackgroundMessage: myBackgroundMessageHandler,
     onLaunch: (Map<String, dynamic> message) async {
@@ -54,12 +58,12 @@ class _MyHomePage2State extends State<MyHomePage2> {
         body: Column(
           children: [
             Container(
-          child: FlatButton(
+              child: FlatButton(
                   onPressed: () async {
                     print('*********************** Token********************');
-                FirebaseMessaging().getToken().then(print);
-              },
-              child: Text("Print token")),
+                    FirebaseMessaging().getToken().then(print);
+                  },
+                  child: Text("Print token")),
             ),
             Container(
               child: FlatButton(

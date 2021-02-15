@@ -9,15 +9,16 @@ import 'notification.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<FirebaseApp> initialize() => Firebase.initializeApp();
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  await initializeNotification();
 
   if (message.containsKey('data')) {
     // Handle data message
     final dynamic data = message['data'];
     print('************** Background Message Data *****************');
     print(data);
+    showNotification('background Data', '$data');
   }
 
   if (message.containsKey('notification')) {
@@ -25,6 +26,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
     final dynamic notification = message['notification'];
     print('************** Background Message Notification *****************');
     print(notification);
+    showNotification('background Notification', '$notification');
   }
 
   // Or do other work.
