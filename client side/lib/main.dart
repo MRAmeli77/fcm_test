@@ -11,7 +11,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,18 +31,48 @@ class MyHomePage2 extends StatefulWidget {
 }
 
 class _MyHomePage2State extends State<MyHomePage2> {
+  FirebaseMessaging _fcm = FirebaseMessaging();
+  String token = 'none';
+  String messageText = 'none';
+
+  @override
+  void initState() {
+    super.initState();
+    _fcm.configure(onMessage: (message) async {
+      setState(() {
+        messageText = message["data"]["title"];
+      });
+    }, onResume: (message) async {
+      setState(() {
+        messageText = message["data"]["title"];
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Firebase Messaing"),
-        ),
-        body: Container(
-          child: FlatButton(
-              onPressed: () {
-                FirebaseMessaging().getToken().then(print);
-              },
-              child: Text("Print token")),
-        ));
+      appBar: AppBar(
+        title: Text("Firebase Message"),
+      ),
+      body: Center(
+        child: Column(children: [
+          FlatButton(
+            onPressed: () {
+              setState(() {
+                _fcm.getToken().then((value) {
+                  token = value;
+                  print(value);
+                });
+              });
+            },
+            child: Text("refresh"),
+            color: Colors.cyan,
+          ),
+          Text("token:  \n" + token + "\n"),
+          Text("\nMessage: \n" + messageText)
+        ]),
+      ),
+    );
   }
 }
